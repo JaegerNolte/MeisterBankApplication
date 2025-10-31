@@ -17,20 +17,6 @@ public class UserRepository {
 
     SQLFileReader loadSQL = new SQLFileReader(); // import method
 
-//    private String loadSQL(String fileName) { // Loads raw sql files to be interpreted into string
-//        try {
-//
-//            ClassPathResource resource = new ClassPathResource("sql/" + fileName);
-//            InputStreamReader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8);
-//            return FileCopyUtils.copyToString(reader);
-//
-//        } catch (IOException exception) {
-//
-//            throw new RuntimeException("Could not read sql file: " + fileName, exception);
-//
-//        }
-//    }
-
 
     public boolean authenticateUser(String username, String passwordHash, String email) {
         String sql = loadSQL.loadSQL("users/select--get_users.sql");
@@ -44,10 +30,12 @@ public class UserRepository {
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next(); // true if found
             }
+
         } catch (SQLException e) {
 
             e.printStackTrace();
             return false;
+
         }
 
 
@@ -55,7 +43,7 @@ public class UserRepository {
 
     public Long registerUser(UserModel user) {
 
-        String sql = loadSQL.loadSQL("users/insert--create_users.sql");
+        String sql = loadSQL.loadSQL("users/insert--create_users.sql"); // loads SQL statement
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -77,9 +65,9 @@ public class UserRepository {
 
             return (long) -1;
 
-        } catch (SQLException e) {
+        } catch (SQLException exception) {
 
-            e.printStackTrace();
+            exception.printStackTrace();
             return (long) -1;
         }
 

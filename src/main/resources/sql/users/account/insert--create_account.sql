@@ -1,0 +1,1 @@
+insert into account (app_user_id, account_type_id, account_nickname) values (?, ?, ?);

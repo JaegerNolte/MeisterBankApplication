@@ -1,0 +1,1 @@
+SELECT * FROM account WHERE app_user_id = ? AND account_type_id = ?;
