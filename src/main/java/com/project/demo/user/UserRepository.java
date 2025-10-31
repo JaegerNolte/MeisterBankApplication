@@ -1,14 +1,9 @@
 package com.project.demo.user;
 
+import com.project.demo.util.SQLFileReader;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.FileCopyUtils;
-
 import javax.sql.DataSource;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.sql.*;
 
 
@@ -20,23 +15,25 @@ public class UserRepository {
     @Autowired
     private DataSource dataSource;
 
-    private String loadSQL(String fileName) { // Loads raw sql files to be interpreted into string
-        try {
+    SQLFileReader loadSQL = new SQLFileReader(); // import method
 
-            ClassPathResource resource = new ClassPathResource("sql/" + fileName);
-            InputStreamReader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8);
-            return FileCopyUtils.copyToString(reader);
-
-        } catch (IOException exception) {
-
-            throw new RuntimeException("Could not read sql file: " + fileName, exception);
-
-        }
-    }
+//    private String loadSQL(String fileName) { // Loads raw sql files to be interpreted into string
+//        try {
+//
+//            ClassPathResource resource = new ClassPathResource("sql/" + fileName);
+//            InputStreamReader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8);
+//            return FileCopyUtils.copyToString(reader);
+//
+//        } catch (IOException exception) {
+//
+//            throw new RuntimeException("Could not read sql file: " + fileName, exception);
+//
+//        }
+//    }
 
 
     public boolean authenticateUser(String username, String passwordHash, String email) {
-        String sql = loadSQL("users/select--get_users.sql");
+        String sql = loadSQL.loadSQL("users/select--get_users.sql");
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -58,7 +55,7 @@ public class UserRepository {
 
     public Long registerUser(UserModel user) {
 
-        String sql = loadSQL("users/insert--create_users.sql");
+        String sql = loadSQL.loadSQL("users/insert--create_users.sql");
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 

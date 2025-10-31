@@ -25,7 +25,7 @@ public class UserController {
     public String register(@RequestBody UserModel user) {
 
         Long id = userService.register(user);
-        return id > 0 ? "User registered with ID" + id : "Registration failed.";
+        return id > 0 ? "User registered with App user ID of " + id : "Registration failed.";
     }
 
 }

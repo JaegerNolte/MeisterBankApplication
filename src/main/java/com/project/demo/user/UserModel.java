@@ -4,7 +4,7 @@ package com.project.demo.user;
 
 public class UserModel {
 
-    private Long id;
+    private Long appUserId;
     private String username;
     private String passwordHash;
     private String email;
@@ -27,12 +27,12 @@ public class UserModel {
         this.ssn = ssn;
     }
 
-    public Long getId() {
-        return id;
+    public Long getAppUserId() {
+        return appUserId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAppUserId(Long appUserId) {
+        this.appUserId = appUserId;
     }
 
     public String getUsername() {
@@ -86,7 +86,7 @@ public class UserModel {
     @Override
     public String toString() {
         return "UserModel{" +
-                "id=" + id +
+                "appUserId=" + appUserId +
                 ", username='" + username + '\'' +
                 ", passwordHash='" + passwordHash + '\'' +
                 ", email='" + email + '\'' +
