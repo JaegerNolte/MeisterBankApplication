@@ -1,8 +1,6 @@
-package com.project.demo.service;
+package com.project.demo.user;
 
 
-import com.project.demo.model.User;
-import com.project.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +18,7 @@ public class UserService {
 
     }
 
-    public Long register(User user) {
+    public Long register(UserModel user) {
 
         return repo.registerUser(user);
 

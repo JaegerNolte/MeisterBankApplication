@@ -1,0 +1,1 @@
+SELECT * FROM app_user WHERE username = ? AND password_hash = ? AND email = ?;

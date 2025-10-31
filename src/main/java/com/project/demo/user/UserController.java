@@ -1,8 +1,6 @@
-package com.project.demo.controller;
+package com.project.demo.user;
 
 
-import com.project.demo.model.User;
-import com.project.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,14 +15,14 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/login")
-    public String login(@RequestBody User user) {
+    public String login(@RequestBody UserModel user) {
 
         boolean success = userService.login(user.getUsername(), user.getPasswordHash(), user.getEmail());
         return success ? "Login Successful!" : "Invalid credentials";
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody User user) {
+    public String register(@RequestBody UserModel user) {
 
         Long id = userService.register(user);
         return id > 0 ? "User registered with ID" + id : "Registration failed.";

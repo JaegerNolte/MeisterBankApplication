@@ -1,0 +1,1 @@
+INSERT INTO app_user (username, password_hash, email) VALUES (?, ?, ?);

@@ -1,6 +1,5 @@
-package com.project.demo.repository;
+package com.project.demo.user;
 
-import com.project.demo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +16,7 @@ public class UserRepository {
     private DataSource dataSource;
 
     public boolean authenticateUser(String username, String passwordHash, String email) {
-        String sql = "SELECT * FROM app_user WHERE username = ? AND password_hash = ? AND email = ?";
+        String sql = "SELECT * FROM app_user WHERE username = ? AND password_hash = ? AND email = ?"; // use files instead of raw jdbc
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -34,9 +33,9 @@ public class UserRepository {
         }
     }
 
-    public Long registerUser(User user) {
+    public Long registerUser(UserModel user) {
 
-        String sql = "INSERT INTO app_user (username, password_hash, email) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO app_user (username, password_hash, email) VALUES (?, ?, ?)"; // use files instead of raw jdbc
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
