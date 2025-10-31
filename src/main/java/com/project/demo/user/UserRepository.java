@@ -1,9 +1,14 @@
 package com.project.demo.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.FileCopyUtils;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 
 
@@ -15,27 +20,45 @@ public class UserRepository {
     @Autowired
     private DataSource dataSource;
 
+    private String loadSQL(String fileName) { // Loads raw sql files to be interpreted into string
+        try {
+
+            ClassPathResource resource = new ClassPathResource("sql/" + fileName);
+            InputStreamReader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8);
+            return FileCopyUtils.copyToString(reader);
+
+        } catch (IOException exception) {
+
+            throw new RuntimeException("Could not read sql file: " + fileName, exception);
+
+        }
+    }
+
+
     public boolean authenticateUser(String username, String passwordHash, String email) {
-        String sql = "SELECT * FROM app_user WHERE username = ? AND password_hash = ? AND email = ?"; // use files instead of raw jdbc
+        String sql = loadSQL("users/select--get_users.sql");
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, username);
-            stmt.setString(2, passwordHash); // Later add Bcyrpt
+            stmt.setString(2, passwordHash);
             stmt.setString(3, email);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next(); // true if found
             }
         } catch (SQLException e) {
+
             e.printStackTrace();
             return false;
         }
+
+
     }
 
     public Long registerUser(UserModel user) {
 
-        String sql = "INSERT INTO app_user (username, password_hash, email) VALUES (?, ?, ?)"; // use files instead of raw jdbc
+        String sql = loadSQL("users/insert--create_users.sql");
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
